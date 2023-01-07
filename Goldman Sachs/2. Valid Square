@@ -1,0 +1,49 @@
+class Solution {
+private:
+    int getLen(vector<int> &a, vector<int> &b){
+        
+        //((x2-x1)^2 + (y2-y1)^2)
+        
+        return ((b[1]-a[1])*(b[1]-a[1]) + (b[0]-a[0])*(b[0]-a[0]));
+    }
+public:
+    bool validSquare(vector<int>& p1, vector<int>& p2, vector<int>& p3, vector<int>& p4) {
+        
+        //To check if any two co ordinates are equal, because lying on same co ordinates wont be a valid square
+        if(p1==p2 || p1==p3 || p1==p4 || p2==p3 || p2==p4 || p3==p4){
+            return false;
+        }
+        //Find The sum of all sides and diagonals
+        vector<int> side = {  
+            getLen(p1, p2),
+            getLen(p1, p3),
+            getLen(p1, p4),
+            getLen(p2, p3),
+            getLen(p2, p4),
+            getLen(p3, p4),
+        };
+        
+        //Store them in a map,along with a count to check how many numbers are equal
+        unordered_map<int, int> mpp;
+        
+        for(auto it: side){
+            if(!mpp.count(it)){
+                mpp.insert({it, 1});
+            }
+            else{
+                mpp[it]++;
+            }
+        }
+        
+        //If all sides and diag would be equal, the size of the map will be only 2 and either one of the side's count will either be 4 or 2
+        
+        if(mpp.size() != 2){
+            return false;
+        }
+        
+        for(auto it:mpp){
+            return (it.second == 4) || (it.second == 2);
+        }
+        return false;
+    }
+};
