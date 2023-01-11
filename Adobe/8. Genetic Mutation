@@ -1,4 +1,6 @@
 // Question is same as Word ladder 1 of GFG
+
+```.cpp
 class Solution {
 public:
     int minMutation(string start, string end, vector<string>& bank) {
@@ -42,3 +44,5 @@ public:
         return -1;
     }
 };
+
+```
