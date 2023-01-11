@@ -1,0 +1,44 @@
+// Question is same as Word ladder 1 of GFG
+class Solution {
+public:
+    int minMutation(string start, string end, vector<string>& bank) {
+        
+        unordered_set<string> st(bank.begin(), bank.end());
+        st.insert(start);
+        
+        char arr[] = {'A', 'C', 'G', 'T'};
+        
+        queue<pair<string,int>> q;
+        q.push({start, 0});
+        
+        int wordLen = start.size();
+        
+        while(!q.empty()){
+            
+            auto top = q.front();
+            q.pop();
+            
+            string word = top.first;
+            int cnt = top.second;
+            
+            if(word == end){
+                return cnt;
+            }
+            
+            for(int i=0; i<wordLen; i++){
+                char original = word[i];
+                
+                for(int j=0; j<4; j++){
+                    word[i] = arr[j];
+                    
+                    if(st.find(word) != st.end()){
+                        q.push({word, cnt+1});
+                        st.erase(word);
+                    }
+                }
+                word[i] = original;
+            }
+        }
+        return -1;
+    }
+};
