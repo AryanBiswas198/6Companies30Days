@@ -1,0 +1,52 @@
+class Solution {
+    // Store the values of the co-ordinates that the horse can go from a single cell
+    vector<vector<int>> dir = {
+          {-2,-1}, {-2, 1}, {-1, 2}, {1, 2}, {2, 1}, {2, -1}, {1, -2}, {-1, -2}
+    };
+    
+private:
+    bool isValid(int n, int row, int col){
+        // returns true if the co-ordinates are inside the matrix
+        if(row<0 || col<0 || row>=n || col>=n){
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+    
+    double f(int n, int k, int row, int col, map<string,double> &mpp){
+        
+        if(!isValid(n, row, col)) return false;
+        
+        //If there are no steps remaining from a particular cell, return 1 as the probabilty is the  cell itself
+        if(k == 0) return 1; 
+        
+        //Stores a key value in the mapp that consists of row, col, and no of steps
+        string key = to_string(row)+"a"+to_string(col)+"b"+to_string(k);
+        
+        // if value already present in a mapp, return the probability to avoid overlapping sub problems
+        if(mpp.find(key) != mpp.end())
+            return mpp[key];
+        
+        double probability = 0;
+        
+        //Else, check the probability of moving into other place while staying inside the matrix
+        
+        for(int i=0; i<8; i++){
+            probability += f(n, k-1, row+dir[i][0], col+dir[i][1], mpp)/8.0;
+        }
+        
+        //Store the probability in a mapp
+        mpp[key] = probability;
+        return probability;
+    }
+public:
+    double knightProbability(int n, int k, int row, int column) {
+        
+        //Create a map to store the values of the probability on a particular cell to avoid overlapping sub problems
+        map<string, double> mpp;
+        
+        return f(n, k, row, column, mpp);
+    }
+};
