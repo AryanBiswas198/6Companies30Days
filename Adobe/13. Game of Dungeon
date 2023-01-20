@@ -1,0 +1,32 @@
+class Solution {
+private:
+    int f(int row, int col, int n, int m, vector<vector<int>> &dungeon, vector<vector<int>> &dp){
+        
+        if(row>=n || col>=m){
+            return 1e9;
+        }
+        
+        if(row==n-1 && col==m-1){
+            return (dungeon[row][col] <= 0) ? abs(dungeon[row][col]) + 1 : 1;
+        }
+        
+        if(dp[row][col] != 1e9){
+            return dp[row][col];
+        }
+        
+        int right = f(row, col+1, n, m, dungeon, dp);
+        int down = f(row+1, col, n, m, dungeon, dp);
+        
+        int minHealth = min(right, down) - dungeon[row][col];
+        
+        return dp[row][col] = (minHealth <= 0) ? 1 : minHealth;
+    }
+public:
+    int calculateMinimumHP(vector<vector<int>>& dungeon) {
+        
+        int n = dungeon.size(), m = dungeon[0].size();
+        vector<vector<int>> dp(n+1, vector<int>(m+1, 1e9));
+        
+        return f(0, 0, n, m, dungeon, dp);
+    };
+};
